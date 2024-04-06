@@ -2,6 +2,7 @@
 
 use App\Models\{
     Course,
+    Module,
     User,
     Preference
 };
@@ -9,14 +10,26 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/one-to-many', function() {
     // $course = Course::create(['name' => 'Curso de Laravel']);
-    $course = Course::first();
+    $course = Course::with('modules.lessons')->first();
+
+    echo $course->name;
+    echo '<br>';
+    foreach ($course->modules as $module){
+        echo "Módulo {$module->name} <br>";
+
+        foreach ($module->lessons as $lesson){
+            echo "Módulo {$lesson->name} <br>";
+        }
+    }
 
     $data = [
         'name' => 'Modulo x2',
     ];
-    $course->modules()->create($data);
+    // $course->modules()->create($data);
 
-    $course->modules()->get();
+    // Module::find(2)->update();
+
+    // $course->modules()->get();
     $modules = $course->modules;
 
     dd($modules);
